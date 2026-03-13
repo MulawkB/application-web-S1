@@ -29,7 +29,7 @@ describe('store', () => {
   describe('create', () => {
     it('should create a new item and return it', async () => {
       const newItem = { id: whispers.length + 1, message: 'test 3' }
-      console.log(`new Item dans describe create : ${JSON.stringify(newItem)}`)
+      // console.log(`new Item dans describe create : ${JSON.stringify(newItem)}`)
       const item = await create(newItem.message)
       expect(item).toEqual(newItem)
     })
@@ -70,13 +70,13 @@ describe('store', () => {
       expect(item).toBeUndefined()
     })
     it('should delete the item with the given id', async () => {
-      const itembefore = await getAll()
-      console.log(`items avant suppression : ${JSON.stringify(itembefore)}`)
+      // const itembefore = await getAll()
+      // console.log(`items avant suppression : ${JSON.stringify(itembefore)}`)
       await deleteById(existingId)
       const items = await getAll()
-      console.log(`items après suppression : ${JSON.stringify(items)}`)
-      const expectedItems = whispers.filter((item) => item.id !== existingId)
-      console.log(`expected items : ${JSON.stringify(expectedItems)}`)
+      // console.log(`items après suppression : ${JSON.stringify(items)}`)
+      // const expectedItems = whispers.filter((item) => item.id !== existingId)
+      // console.log(`expected items : ${JSON.stringify(expectedItems)}`)
       expect(items).toEqual(whispers.filter((item) => item.id !== existingId))
     })
   })

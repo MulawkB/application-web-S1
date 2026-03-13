@@ -14,7 +14,7 @@ const getById = async (id) => {
 const create = async (message) => {
   const data = await readData()
   const newItem = { message, id: data.length + 1 }
-  console.log(`new Item dans method create : ${JSON.stringify(newItem)}`)
+  // console.log(`new Item dans method create : ${JSON.stringify(newItem)}`)
   await saveChanges(data.concat([newItem]))
   return newItem
 }

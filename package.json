@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
+  "standard": {
+    "env": [
+      "jest"
+    ]
+  },
   "scripts": {
     "start": "node index.js",
     "test": "jest",

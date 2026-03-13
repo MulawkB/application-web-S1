@@ -1,11 +1,16 @@
 import express from 'express'
 import bodyParser from 'body-parser'
-import { getById } from './store'
+import { getAll, getById, create, updateById, deleteById } from './store.js'
 
 const app = express()
 app.use(bodyParser.json())
+app.set('view engine', 'ejs')
+app.get('/about', async (req, res) => {
+  const whispers = await getAll()
+  res.render('about', { whispers })
+})
 app.get('/api/v1/whisper', async (req, res) => {
-    const whispers = await getAll()
+  const whispers = await getAll()
   res.json(whispers)
 })
 
@@ -19,41 +24,45 @@ app.get('/api/v1/whisper/:id', async (req, res) => {
   }
 })
 
-app.post('/api/v1/whisper',async (req, res) => {
-    const { message } = req.body;
-    if (!message) {
-        res.status(400).json;
-    } else {
-        const whisper = await create(message);
-        res.status(201).json(whisper);
-    }
-});
-
-app.put('/api/v1/whisper/:id',async (req, res) => {
-  const { message } = req.body;
-  const id = parseInt(req.params.id)
-    if (!message) {
-        res.status(400).json;
-    } else {
-        const whisper = await getById(id);
-        if (!whisper) {
-            res.sendStatus(404);
-        } else {
-            await updateById(id, message);
-            res.sendStatus(200);
-        }
-    }
+app.post('/api/v1/whisper', async (req, res) => {
+  console.log(`body : ${JSON.stringify(req.body)}`)
+  const { message } = req.body
+  console.log(`message : ${message}`)
+  if (!message) {
+    console.log('message is missing')
+    res.sendStatus(400)
+  } else {
+    console.log('message is valid')
+    const whisper = await create(message)
+    res.status(201).json(whisper)
+  }
 })
 
-app.delete('/api/v1/whisper/:id',async (req, res) => {
+app.put('/api/v1/whisper/:id', async (req, res) => {
+  const { message } = req.body
   const id = parseInt(req.params.id)
-  const whisper = await getById(id);
+  if (!message) {
+    res.sendStatus(400)
+  } else {
+    const whisper = await getById(id)
     if (!whisper) {
-        res.sendStatus(404);
-        return;
+      res.sendStatus(404)
+    } else {
+      await updateById(id, message)
+      res.sendStatus(200)
     }
-    await deleteById(id);
-    res.sendStatus(200);
+  }
+})
+
+app.delete('/api/v1/whisper/:id', async (req, res) => {
+  const id = parseInt(req.params.id)
+  const whisper = await getById(id)
+  if (!whisper) {
+    res.sendStatus(404)
+  } else {
+        await deleteById(id)
+        res.sendStatus(200)
+    }
 })
 
 export { app }
